@@ -4,15 +4,15 @@ library(ggplot2)
 load("data/plotting.RDATA")
 
 max_metabolites <- plotting_data %>%
-  filter(!is.na(Group)) %>%
+  filter(!is.na(ANOVA_group)) %>%
   group_by(Tissue, Metabolite) %>%
   summarise() %>%
   group_by(Tissue) %>%
   summarise(max = n())
 
 group_A_data <- plotting_data %>%
-  filter(sapply(Group, function(x) grepl("A", x))) %>%
-  group_by(Tissue, Method, Class, Metabolite, Group) %>%
+  filter(sapply(ANOVA_group, function(x) grepl("A", x))) %>%
+  group_by(Tissue, Method, Class, Metabolite, ANOVA_group) %>%
   summarise()
 
 data1 <- group_A_data %>%
@@ -42,9 +42,9 @@ ggplot(data1,
 
 data2 <- group_A_data %>%
   group_by(Tissue, Metabolite) %>%
-  mutate(n_opt = sum(sapply(Group, function(x) grepl("A", x)))) %>%
+  mutate(n_opt = sum(sapply(ANOVA_group, function(x) grepl("A", x)))) %>%
   filter(n_opt == 1,
-         sapply(Group, function(x) grepl("A", x))) %>%
+         sapply(ANOVA_group, function(x) grepl("A", x))) %>%
   group_by(Tissue, Method, Class) %>%
   summarise(Number = n())
 

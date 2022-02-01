@@ -9,20 +9,20 @@ library(gridExtra)
 load("data/plotting.RDATA")
 
 valid_data <- plotting_data %>%
-  filter(Valid) %>%
-  group_by(Tissue, Class, Metabolite, Method, CV, CV_tresh) %>%
+  filter(valid_replicates) %>%
+  group_by(Tissue, Class, Metabolite, Method, CV, CV_thresh) %>%
   summarise()
 
 # Bar plots ---------------------------------------------------------------
 
 data1 <- valid_data %>%
-  group_by(Tissue, Method, CV_tresh) %>%
+  group_by(Tissue, Method, CV_thresh) %>%
   summarise(Number = n())
 
 ggplot(data = data1,
        aes(x = Method,
            y = Number,
-           fill = CV_tresh)) +
+           fill = CV_thresh)) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_fill_manual("CV",
                     values = c("#5AAA46", "#A0AA46", "#D37538", "#C84D4C"),
@@ -82,9 +82,9 @@ p_list <- lapply(unique(plotting_data$Tissue), function(tissue) {
   # percentage of metabolites below each threshold
   tmp_df <- valid_data  %>%
     filter(Tissue == tissue) %>%
-    group_by(Method, CV_tresh) %>%
+    group_by(Method, CV_thresh) %>%
     summarise(Percentage = n() / 630 * 100) %>%
-    spread(CV_tresh, Percentage) %>%
+    spread(CV_thresh, Percentage) %>%
     data.frame() %>%
     column_to_rownames("Method")
   

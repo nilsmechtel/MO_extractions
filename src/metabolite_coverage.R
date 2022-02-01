@@ -6,7 +6,7 @@ library(xlsx)
 
 load("data/plotting.RDATA")
 
-valid_data <- filter(plotting_data, Valid)
+valid_data <- filter(plotting_data, valid_replicates)
 
 # Bar plot ----------------------------------------------------------------
 
